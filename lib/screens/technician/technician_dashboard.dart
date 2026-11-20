@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'kyc_screen.dart';
 
 class TechnicianDashboard extends StatelessWidget {
   const TechnicianDashboard({super.key});
@@ -53,35 +53,48 @@ class TechnicianDashboard extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(18),
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.verified_user_outlined,
                       color: Color(0xFF7041D8),
                       size: 36,
                     ),
-                    SizedBox(height: 12),
-                    Text(
+                    const SizedBox(height: 12),
+                    const Text(
                       'ยืนยันตัวตนช่าง',
                       style: TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text(
+                    const SizedBox(height: 8),
+                    const Text(
                       'กรุณาดำเนินการยืนยันตัวตน '
                       'เพื่อเปิดใช้งานความสามารถสำหรับช่าง',
                       style: TextStyle(color: Colors.grey),
                     ),
-                    SizedBox(height: 12),
-                    Chip(
+                    const SizedBox(height: 12),
+                    const Chip(
                       avatar: Icon(
                         Icons.info_outline,
                         size: 18,
                       ),
                       label: Text('โปรดตรวจสอบสถานะ KYC'),
+                    ),
+                    const SizedBox(height: 16),
+                    FilledButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const KycScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.verified_user_outlined),
+                      label: const Text('ยืนยันตัวตนตอนนี้'),
                     ),
                   ],
                 ),

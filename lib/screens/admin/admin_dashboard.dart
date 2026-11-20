@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'kyc_management_screen.dart';
 
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});
@@ -42,9 +42,17 @@ class AdminDashboard extends StatelessWidget {
               icon: Icons.people_outline,
               title: 'จัดการสมาชิก',
             ),
-            const _AdminItem(
+            _AdminItem(
               icon: Icons.verified_user_outlined,
               title: 'ตรวจสอบ KYC',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const KycManagementScreen(),
+                  ),
+                );
+              },
             ),
             const _AdminItem(
               icon: Icons.rate_review_outlined,
@@ -68,10 +76,12 @@ class AdminDashboard extends StatelessWidget {
 class _AdminItem extends StatelessWidget {
   final IconData icon;
   final String title;
+  final VoidCallback? onTap;
 
   const _AdminItem({
     required this.icon,
     required this.title,
+    this.onTap,
   });
 
   @override
@@ -86,6 +96,7 @@ class _AdminItem extends StatelessWidget {
         ),
         title: Text(title),
         trailing: const Icon(Icons.chevron_right),
+        onTap: onTap,
       ),
     );
   }
