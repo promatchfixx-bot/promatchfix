@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+
 import '../../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -50,9 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              'สมัครสมาชิกแล้ว กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี',
-            ),
+            content: Text('สมัครสมาชิกแล้ว กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี'),
           ),
         );
 
@@ -66,9 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
     } on Exception catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาด: $e')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
     } finally {
       if (mounted) {
         setState(() => _loading = false);
@@ -78,11 +75,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _forgotPassword() async {
     if (_emailController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('กรุณากรอกอีเมลก่อน'),
-        ),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('กรุณากรอกอีเมลก่อน')));
       return;
     }
 
@@ -92,23 +86,17 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('ส่งลิงก์รีเซ็ตรหัสผ่านแล้ว'),
-        ),
+        const SnackBar(content: Text('ส่งลิงก์รีเซ็ตรหัสผ่านแล้ว')),
       );
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาด: $e')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
     }
   }
 
-  InputDecoration _decoration(
-    String label,
-    IconData icon,
-  ) {
+  InputDecoration _decoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
       prefixIcon: Icon(icon),
@@ -118,10 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide.none,
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 16,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );
   }
 
@@ -134,19 +119,13 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 420,
-              ),
+              constraints: const BoxConstraints(maxWidth: 420),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Icon(
-                      Icons.handyman_outlined,
-                      size: 58,
-                      color: primary,
-                    ),
+                    Icon(Icons.handyman_outlined, size: 58, color: primary),
                     const SizedBox(height: 12),
                     const Text(
                       'Promatchfix',
@@ -160,16 +139,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Text(
                       'ค้นหาช่างและบริการที่คุณไว้วางใจ',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(color: Colors.grey),
                     ),
                     const SizedBox(height: 32),
 
                     Text(
-                      _isRegister
-                          ? 'สร้างบัญชีใหม่'
-                          : 'ยินดีต้อนรับกลับมา',
+                      _isRegister ? 'สร้างบัญชีใหม่' : 'ยินดีต้อนรับกลับมา',
                       style: const TextStyle(
                         fontSize: 23,
                         fontWeight: FontWeight.bold,
@@ -184,18 +159,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           'ชื่อ-นามสกุล',
                           Icons.person_outline,
                         ),
-                        validator: (v) =>
-                            v == null || v.trim().isEmpty
-                                ? 'กรุณากรอกชื่อ-นามสกุล'
-                                : null,
+                        validator: (v) => v == null || v.trim().isEmpty
+                            ? 'กรุณากรอกชื่อ-นามสกุล'
+                            : null,
                       ),
                       const SizedBox(height: 14),
 
                       const Text(
                         'ประเภทบัญชี',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 8),
 
@@ -227,43 +199,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: _decoration(
-                        'อีเมล',
-                        Icons.email_outlined,
-                      ),
+                      decoration: _decoration('อีเมล', Icons.email_outlined),
                       validator: (v) =>
                           v == null ||
-                          !RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
-                              .hasMatch(v.trim())
-                              ? 'กรุณากรอกอีเมลให้ถูกต้อง'
-                              : null,
+                              !RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+                                  .hasMatch(v.trim())
+                          ? 'กรุณากรอกอีเมลให้ถูกต้อง'
+                          : null,
                     ),
                     const SizedBox(height: 14),
 
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _hidePassword,
-                      decoration: _decoration(
-                        'รหัสผ่าน',
-                        Icons.lock_outline,
-                      ).copyWith(
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _hidePassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                      decoration: _decoration('รหัสผ่าน', Icons.lock_outline)
+                          .copyWith(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _hidePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() => _hidePassword = !_hidePassword);
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            setState(
-                              () => _hidePassword = !_hidePassword,
-                            );
-                          },
-                        ),
-                      ),
-                      validator: (v) =>
-                          v == null || v.length < 8
-                              ? 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร'
-                              : null,
+                      validator: (v) => v == null || v.length < 8
+                          ? 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร'
+                          : null,
                     ),
 
                     if (!_isRegister)
@@ -292,9 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Colors.white,
                               )
                             : Text(
-                                _isRegister
-                                    ? 'สมัครสมาชิก'
-                                    : 'เข้าสู่ระบบ',
+                                _isRegister ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -309,9 +271,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          _isRegister
-                              ? 'มีบัญชีอยู่แล้ว? '
-                              : 'ยังไม่มีบัญชี? ',
+                          _isRegister ? 'มีบัญชีอยู่แล้ว? ' : 'ยังไม่มีบัญชี? ',
                         ),
                         TextButton(
                           onPressed: () {
@@ -320,9 +280,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                           },
                           child: Text(
-                            _isRegister
-                                ? 'เข้าสู่ระบบ'
-                                : 'สมัครสมาชิก',
+                            _isRegister ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก',
                           ),
                         ),
                       ],

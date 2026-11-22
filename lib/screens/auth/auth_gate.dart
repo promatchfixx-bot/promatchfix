@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,9 +10,7 @@ import '../admin/admin_dashboard.dart';
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
-  Future<Map<String, dynamic>?> _getProfile(
-    String userId,
-  ) async {
+  Future<Map<String, dynamic>?> _getProfile(String userId) async {
     return await Supabase.instance.client
         .from('profiles')
         .select('id, full_name, role')
@@ -38,12 +35,9 @@ class AuthGate extends StatelessWidget {
           key: ValueKey(user.id),
           future: _getProfile(user.id),
           builder: (context, profileSnapshot) {
-            if (profileSnapshot.connectionState ==
-                ConnectionState.waiting) {
+            if (profileSnapshot.connectionState == ConnectionState.waiting) {
               return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                body: Center(child: CircularProgressIndicator()),
               );
             }
 
@@ -61,9 +55,7 @@ class AuthGate extends StatelessWidget {
                           size: 48,
                         ),
                         const SizedBox(height: 12),
-                        const Text(
-                          'ไม่สามารถโหลดข้อมูลบัญชีได้',
-                        ),
+                        const Text('ไม่สามารถโหลดข้อมูลบัญชีได้'),
                         const SizedBox(height: 12),
                         Text(
                           '${profileSnapshot.error}',
@@ -88,9 +80,7 @@ class AuthGate extends StatelessWidget {
             if (profile == null) {
               return const Scaffold(
                 body: Center(
-                  child: Text(
-                    'ไม่พบข้อมูลโปรไฟล์ กรุณาติดต่อผู้ดูแลระบบ',
-                  ),
+                  child: Text('ไม่พบข้อมูลโปรไฟล์ กรุณาติดต่อผู้ดูแลระบบ'),
                 ),
               );
             }
@@ -109,9 +99,7 @@ class AuthGate extends StatelessWidget {
 
               default:
                 return const Scaffold(
-                  body: Center(
-                    child: Text('ไม่พบประเภทบัญชีที่ถูกต้อง'),
-                  ),
+                  body: Center(child: Text('ไม่พบประเภทบัญชีที่ถูกต้อง')),
                 );
             }
           },

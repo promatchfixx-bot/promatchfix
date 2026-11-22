@@ -54,9 +54,7 @@ class _KycScreenState extends State<KycScreen> {
   }
 
   Future<void> _pickImage() async {
-    final file = await FilePicker.pickFile(
-      type: FileType.image,
-    );
+    final file = await FilePicker.pickFile(type: FileType.image);
 
     if (file == null) return;
 
@@ -126,9 +124,8 @@ class _KycScreenState extends State<KycScreen> {
   void _showMessage(String message) {
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   String _statusText(String? status) {
@@ -158,9 +155,7 @@ class _KycScreenState extends State<KycScreen> {
       ),
       body: SafeArea(
         child: _loadingStatus
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
+            ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -194,21 +189,15 @@ class _KycScreenState extends State<KycScreen> {
                           color: Color(0xFF7041D8),
                         ),
                         title: const Text('สถานะ KYC'),
-                        subtitle: Text(
-                          _statusText(currentStatus),
-                        ),
+                        subtitle: Text(_statusText(currentStatus)),
                       ),
                     ),
                     if (currentStatus == 'rejected')
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Text(
                           'เหตุผล: ${_status?['rejection_reason'] ?? 'กรุณาตรวจสอบเอกสาร'}',
-                          style: const TextStyle(
-                            color: Colors.red,
-                          ),
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ),
                     if (currentStatus == 'approved')
@@ -231,9 +220,7 @@ class _KycScreenState extends State<KycScreen> {
                           children: [
                             const Text(
                               'เลขบัตรประชาชน 13 หลัก',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 8),
                             TextFormField(
@@ -242,9 +229,7 @@ class _KycScreenState extends State<KycScreen> {
                               maxLength: 13,
                               decoration: const InputDecoration(
                                 hintText: 'กรอกเลขบัตรประชาชน',
-                                prefixIcon: Icon(
-                                  Icons.credit_card_outlined,
-                                ),
+                                prefixIcon: Icon(Icons.credit_card_outlined),
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(),
@@ -261,28 +246,20 @@ class _KycScreenState extends State<KycScreen> {
                             const SizedBox(height: 16),
                             const Text(
                               'รูปบัตรประชาชนด้านหน้า',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 8),
                             OutlinedButton.icon(
                               onPressed: _loading ? null : _pickImage,
-                              icon: const Icon(
-                                Icons.upload_file,
-                              ),
-                              label: const Text(
-                                'เลือกรูปบัตรประชาชน',
-                              ),
+                              icon: const Icon(Icons.upload_file),
+                              label: const Text('เลือกรูปบัตรประชาชน'),
                             ),
                             if (_selectedFile != null)
                               Padding(
                                 padding: const EdgeInsets.only(top: 8),
                                 child: Text(
                                   'ไฟล์: ${_selectedFile!.name}',
-                                  style: const TextStyle(
-                                    color: Colors.green,
-                                  ),
+                                  style: const TextStyle(color: Colors.green),
                                 ),
                               ),
                             const SizedBox(height: 20),
@@ -295,9 +272,7 @@ class _KycScreenState extends State<KycScreen> {
                                     ? const CircularProgressIndicator(
                                         color: Colors.white,
                                       )
-                                    : const Text(
-                                        'ส่งข้อมูลยืนยันตัวตน',
-                                      ),
+                                    : const Text('ส่งข้อมูลยืนยันตัวตน'),
                               ),
                             ),
                             const SizedBox(height: 16),

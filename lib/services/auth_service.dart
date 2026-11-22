@@ -1,4 +1,3 @@
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
@@ -17,17 +16,11 @@ class AuthService {
     await _client.auth.signUp(
       email: email.trim(),
       password: password,
-      data: {
-        'full_name': fullName.trim(),
-        'role': role,
-      },
+      data: {'full_name': fullName.trim(), 'role': role},
     );
   }
 
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     await _client.auth.signInWithPassword(
       email: email.trim(),
       password: password,
@@ -39,9 +32,7 @@ class AuthService {
   }
 
   Future<void> resetPassword(String email) async {
-    await _client.auth.resetPasswordForEmail(
-      email.trim(),
-    );
+    await _client.auth.resetPasswordForEmail(email.trim());
   }
 
   Future<Map<String, dynamic>?> getProfile() async {
@@ -56,6 +47,5 @@ class AuthService {
         .maybeSingle();
   }
 
-  Stream<AuthState> get authChanges =>
-      _client.auth.onAuthStateChange;
+  Stream<AuthState> get authChanges => _client.auth.onAuthStateChange;
 }

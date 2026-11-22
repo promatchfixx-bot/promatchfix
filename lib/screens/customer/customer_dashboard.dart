@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'technician_map_screen.dart';
 
 class CustomerDashboard extends StatelessWidget {
   const CustomerDashboard({super.key});
@@ -37,10 +38,7 @@ class CustomerDashboard extends StatelessWidget {
             children: [
               const Text(
                 'สวัสดี ยินดีต้อนรับ',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
@@ -48,7 +46,6 @@ class CustomerDashboard extends StatelessWidget {
                 style: const TextStyle(color: Colors.grey),
               ),
               const SizedBox(height: 24),
-
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
@@ -81,18 +78,28 @@ class CustomerDashboard extends StatelessWidget {
                   ],
                 ),
               ),
-
-              const SizedBox(height: 28),
-
-              const Text(
-                'บริการของเรา',
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const TechnicianMapScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.map_outlined),
+                  label: const Text('ค้นหาช่างบนแผนที่'),
                 ),
               ),
+              const SizedBox(height: 28),
+              const Text(
+                'บริการของเรา',
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 14),
-
               GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
@@ -112,18 +119,12 @@ class CustomerDashboard extends StatelessWidget {
                   _ServiceItem(Icons.pool_outlined, 'สระว่ายน้ำ'),
                 ],
               ),
-
               const SizedBox(height: 24),
-
               const Text(
                 'เมนูการใช้งาน',
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-
               const _MenuItem(
                 icon: Icons.search,
                 title: 'ค้นหาช่าง',
@@ -201,10 +202,7 @@ class _MenuItem extends StatelessWidget {
       elevation: 0,
       margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
-        leading: Icon(
-          icon,
-          color: CustomerDashboard.primary,
-        ),
+        leading: Icon(icon, color: CustomerDashboard.primary),
         title: Text(title),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),

@@ -43,6 +43,7 @@ dependencies:
   cached_network_image: ^4.0.7
   intl: ^0.20.3
   file_picker: ^13.4.0
+  geolocator: ^14.0.1
 
 dev_dependencies:
   flutter_test:

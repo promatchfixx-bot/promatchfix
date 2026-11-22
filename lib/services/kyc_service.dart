@@ -1,11 +1,9 @@
-
 import 'dart:typed_data';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class KycService {
-  final SupabaseClient _client =
-      Supabase.instance.client;
+  final SupabaseClient _client = Supabase.instance.client;
 
   Future<void> submitKyc({
     required String nationalId,
@@ -39,9 +37,7 @@ class KycService {
         .inFilter('status', ['pending', 'approved']);
 
     if ((existing as List).isNotEmpty) {
-      throw Exception(
-        'คุณมีรายการ KYC ที่กำลังตรวจสอบหรือผ่านแล้ว',
-      );
+      throw Exception('คุณมีรายการ KYC ที่กำลังตรวจสอบหรือผ่านแล้ว');
     }
 
     if (imageBytes.isEmpty) {
@@ -67,21 +63,16 @@ class KycService {
       throw Exception('รองรับเฉพาะ JPG, PNG และ WebP');
     }
 
-    final timestamp =
-        DateTime.now().millisecondsSinceEpoch;
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
 
-    final filePath =
-        '${user.id}/kyc_$timestamp.$extension';
+    final filePath = '${user.id}/kyc_$timestamp.$extension';
 
     await _client.storage
         .from('technician-kyc')
         .uploadBinary(
           filePath,
           imageBytes,
-          fileOptions: FileOptions(
-            contentType: contentType,
-            upsert: false,
-          ),
+          fileOptions: FileOptions(contentType: contentType, upsert: false),
         );
 
     try {
@@ -92,9 +83,7 @@ class KycService {
         'card_image_path': filePath,
       });
     } catch (_) {
-      await _client.storage
-          .from('technician-kyc')
-          .remove([filePath]);
+      await _client.storage.from('technician-kyc').remove([filePath]);
 
       rethrow;
     }
@@ -123,9 +112,7 @@ class KycService {
 
     final result = await _client
         .from('technician_kyc')
-        .select(
-          'id, status, rejection_reason, submitted_at, reviewed_at',
-        )
+        .select('id, status, rejection_reason, submitted_at, reviewed_at')
         .eq('technician_id', user.id)
         .order('submitted_at', ascending: false)
         .limit(1)

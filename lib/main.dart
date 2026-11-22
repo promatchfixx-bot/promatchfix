@@ -15,16 +15,9 @@ Future<void> main() async {
     throw StateError('Supabase configuration missing');
   }
 
-  await Supabase.initialize(
-    url: supabaseUrl,
-    publishableKey: supabaseKey,
-  );
+  await Supabase.initialize(url: supabaseUrl, publishableKey: supabaseKey);
 
-  runApp(
-    const ProviderScope(
-      child: PromatchfixApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: PromatchfixApp()));
 }
 
 class PromatchfixApp extends StatelessWidget {
@@ -37,9 +30,7 @@ class PromatchfixApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF7041D8),
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7041D8)),
         scaffoldBackgroundColor: const Color(0xFFF8F8FC),
         fontFamily: 'Roboto',
       ),

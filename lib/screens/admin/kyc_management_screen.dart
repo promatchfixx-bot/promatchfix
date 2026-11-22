@@ -33,9 +33,9 @@ class _KycManagementScreenState extends State<KycManagementScreen> {
       if (!mounted) return;
 
       setState(() {
-       submissions
-  ..clear()
-  ..addAll(result);
+        submissions
+          ..clear()
+          ..addAll(result);
         loading = false;
       });
     } catch (e) {
@@ -47,15 +47,10 @@ class _KycManagementScreenState extends State<KycManagementScreen> {
   }
 
   void _message(String value) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(value)),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
   }
 
-  Future<void> _review(
-    Map<String, dynamic> item,
-    String status,
-  ) async {
+  Future<void> _review(Map<String, dynamic> item, String status) async {
     String? reason;
 
     if (status == 'rejected') {
@@ -82,9 +77,7 @@ class _KycManagementScreenState extends State<KycManagementScreen> {
           .eq('status', 'pending');
 
       _message(
-        status == 'approved'
-            ? 'อนุมัติ KYC เรียบร้อย'
-            : 'ปฏิเสธ KYC เรียบร้อย',
+        status == 'approved' ? 'อนุมัติ KYC เรียบร้อย' : 'ปฏิเสธ KYC เรียบร้อย',
       );
 
       await _loadSubmissions();
@@ -114,10 +107,7 @@ class _KycManagementScreenState extends State<KycManagementScreen> {
             child: const Text('ยกเลิก'),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(
-              context,
-              controller.text.trim(),
-            ),
+            onPressed: () => Navigator.pop(context, controller.text.trim()),
             child: const Text('ยืนยัน'),
           ),
         ],
@@ -128,9 +118,7 @@ class _KycManagementScreenState extends State<KycManagementScreen> {
     return result;
   }
 
-  Future<void> _showDocument(
-    String path,
-  ) async {
+  Future<void> _showDocument(String path) async {
     try {
       final imageUrl = await client.storage
           .from('technician-kyc')
@@ -175,77 +163,61 @@ class _KycManagementScreenState extends State<KycManagementScreen> {
         ],
       ),
       body: loading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : submissions.isEmpty
-              ? const Center(
-                  child: Text('ไม่มีรายการรอตรวจสอบ'),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: submissions.length,
-                  itemBuilder: (context, index) {
-                    final item = submissions[index];
+          ? const Center(child: Text('ไม่มีรายการรอตรวจสอบ'))
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: submissions.length,
+              itemBuilder: (context, index) {
+                final item = submissions[index];
 
-                    return Card(
-                      color: Colors.white,
-                      elevation: 0,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                return Card(
+                  color: Colors.white,
+                  elevation: 0,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ผู้สมัคร: ${item['technician_id']}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('เลขบัตรลงท้าย: ****${item['national_id_last4']}'),
+                        const SizedBox(height: 12),
+                        OutlinedButton.icon(
+                          onPressed: () =>
+                              _showDocument(item['card_image_path']),
+                          icon: const Icon(Icons.image_outlined),
+                          label: const Text('ดูรูปบัตร'),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
                           children: [
-                            Text(
-                              'ผู้สมัคร: ${item['technician_id']}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () => _review(item, 'rejected'),
+                                child: const Text('ปฏิเสธ'),
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'เลขบัตรลงท้าย: ****${item['national_id_last4']}',
-                            ),
-                            const SizedBox(height: 12),
-                            OutlinedButton.icon(
-                              onPressed: () => _showDocument(
-                                item['card_image_path'],
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: FilledButton(
+                                onPressed: () => _review(item, 'approved'),
+                                child: const Text('อนุมัติ'),
                               ),
-                              icon: const Icon(Icons.image_outlined),
-                              label: const Text('ดูรูปบัตร'),
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: OutlinedButton(
-                                    onPressed: () => _review(
-                                      item,
-                                      'rejected',
-                                    ),
-                                    child: const Text('ปฏิเสธ'),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: FilledButton(
-                                    onPressed: () => _review(
-                                      item,
-                                      'approved',
-                                    ),
-                                    child: const Text('อนุมัติ'),
-                                  ),
-                                ),
-                              ],
                             ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

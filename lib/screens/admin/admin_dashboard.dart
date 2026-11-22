@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'admin_reports_screen.dart';
+import 'admin_users_screen.dart';
 import 'kyc_management_screen.dart';
 
 class AdminDashboard extends StatelessWidget {
@@ -30,17 +33,20 @@ class AdminDashboard extends StatelessWidget {
           children: [
             const Text(
               'ผู้ดูแลระบบ',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(user?.email ?? ''),
             const SizedBox(height: 24),
-            const _AdminItem(
+            _AdminItem(
               icon: Icons.people_outline,
               title: 'จัดการสมาชิก',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AdminUsersScreen()),
+                );
+              },
             ),
             _AdminItem(
               icon: Icons.verified_user_outlined,
@@ -66,6 +72,16 @@ class AdminDashboard extends StatelessWidget {
               icon: Icons.payments_outlined,
               title: 'ตรวจสอบการชำระเงิน',
             ),
+            _AdminItem(
+              icon: Icons.analytics_outlined,
+              title: 'รายงานระบบ',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AdminReportsScreen()),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -78,11 +94,7 @@ class _AdminItem extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;
 
-  const _AdminItem({
-    required this.icon,
-    required this.title,
-    this.onTap,
-  });
+  const _AdminItem({required this.icon, required this.title, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +102,7 @@ class _AdminItem extends StatelessWidget {
       color: Colors.white,
       elevation: 0,
       child: ListTile(
-        leading: Icon(
-          icon,
-          color: const Color(0xFF16834D),
-        ),
+        leading: Icon(icon, color: const Color(0xFF16834D)),
         title: Text(title),
         trailing: const Icon(Icons.chevron_right),
         onTap: onTap,
