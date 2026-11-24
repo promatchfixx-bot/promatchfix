@@ -23,8 +23,17 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Create env file from secret
+        run: |
+          mkdir -p env
+          echo '${{ secrets.ENV_DEV_JSON }}' > env/dev.json
+
       - name: Build web
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        run: flutter build web --release --dart-define-from-file=env/dev.json --base-href "/${{ github.event.repository.name }}/"
+
+      - name: Remove env file
+        if: always()
+        run: rm -f env/dev.json
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
