@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'admin_complaints_screen.dart';
 import 'admin_reports_screen.dart';
+import 'admin_reviews_screen.dart';
+import 'admin_technician_members_screen.dart';
 import 'admin_users_screen.dart';
 import 'kyc_management_screen.dart';
 
@@ -60,17 +63,41 @@ class AdminDashboard extends StatelessWidget {
                 );
               },
             ),
-            const _AdminItem(
+            _AdminItem(
               icon: Icons.rate_review_outlined,
               title: 'ตรวจสอบรีวิว',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AdminReviewsScreen(),
+                  ),
+                );
+              },
             ),
-            const _AdminItem(
+            _AdminItem(
               icon: Icons.report_outlined,
               title: 'จัดการข้อร้องเรียน',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AdminComplaintsScreen(),
+                  ),
+                );
+              },
             ),
-            const _AdminItem(
-              icon: Icons.payments_outlined,
-              title: 'ตรวจสอบการชำระเงิน',
+            _AdminItem(
+              icon: Icons.workspace_premium_outlined,
+              title: 'สมาชิกช่างรายเดือน',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AdminTechnicianMembersScreen(),
+                  ),
+                );
+              },
             ),
             _AdminItem(
               icon: Icons.analytics_outlined,

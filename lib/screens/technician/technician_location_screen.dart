@@ -24,7 +24,20 @@ class _TechnicianLocationScreenState extends State<TechnicianLocationScreen> {
   double? _accuracy;
 
   String _formatError(Object error) {
-    return error.toString().replaceFirst('Exception: ', '');
+    final raw = error.toString().replaceFirst('Exception: ', '');
+
+    if (raw.contains(
+          'KYC, approval, account or subscription requirement not met',
+        ) ||
+        raw.contains('P0001')) {
+      return 'ยังไม่ผ่านเงื่อนไขการเปิดรับงาน กรุณาตรวจสอบการยืนยันตัวตน (KYC), การอนุมัติบัญชี, ข้อมูลโปรไฟล์ หรือแพ็กเกจสมาชิก';
+    }
+
+    if (raw.startsWith('PostgrestException')) {
+      return 'ไม่สามารถอัปเดตสถานะการรับงานได้ กรุณาลองใหม่อีกครั้ง';
+    }
+
+    return raw;
   }
 
   void _startPositionStream() {

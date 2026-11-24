@@ -4,9 +4,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../widgets/technician_online_toggle.dart';
 import 'kyc_screen.dart';
 import 'subscription_screen.dart';
+import 'technician_job_board_screen.dart';
+import 'technician_jobs_screen.dart';
 import 'technician_location_screen.dart';
-import 'technician_pricing_screen.dart';
 import 'technician_profile_screen.dart';
+import 'technician_service_catalog_screen.dart';
 
 class TechnicianDashboard extends StatelessWidget {
   const TechnicianDashboard({super.key});
@@ -104,25 +106,36 @@ class TechnicianDashboard extends StatelessWidget {
                 style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              const _TechnicianMenu(
+              _TechnicianMenu(
                 icon: Icons.calendar_month_outlined,
-                title: 'คิวงานประจำวัน',
-                subtitle: 'ดูรายการนัดหมายของแต่ละวัน',
+                title: 'คิวงานและงานที่ได้รับ',
+                subtitle: 'ดูรายการงานประจำวัน ',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const TechnicianJobsScreen(),
+                    ),
+                  );
+                },
               ),
-              const _TechnicianMenu(
-                icon: Icons.assignment_outlined,
-                title: 'งานที่ได้รับ',
-                subtitle: 'ตรวจสอบ Job Number และรายละเอียดงาน',
-              ),
-              const _TechnicianMenu(
+              _TechnicianMenu(
                 icon: Icons.work_outline,
                 title: 'บอร์ดประกาศงาน',
                 subtitle: 'ค้นหางานและส่งใบเสนอราคา',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const TechnicianJobBoardScreen(),
+                    ),
+                  );
+                },
               ),
               _TechnicianMenu(
                 icon: Icons.person_outline,
                 title: 'โปรไฟล์ช่าง',
-                subtitle: 'จัดการข้อมูลและค่าบริการ',
+                subtitle: 'จัดการข้อมูลส่วนตัว',
                 onTap: () {
                   Navigator.push(
                     context,
@@ -131,11 +144,6 @@ class TechnicianDashboard extends StatelessWidget {
                     ),
                   );
                 },
-              ),
-              const _TechnicianMenu(
-                icon: Icons.credit_card_outlined,
-                title: 'สมาชิกของฉัน',
-                subtitle: 'ตรวจสอบวันหมดอายุสมาชิก',
               ),
               Card(
                 color: Colors.white,
@@ -147,7 +155,7 @@ class TechnicianDashboard extends StatelessWidget {
                     color: Color(0xFF7041D8),
                   ),
                   title: const Text('สมาชิกและแพ็กเกจ'),
-                  subtitle: const Text('จัดการสมาชิก 250 บาท / 30 วัน'),
+                  subtitle: const Text('ระบบสมาชิกช่างรายเดือน'),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     Navigator.push(
@@ -164,33 +172,6 @@ class TechnicianDashboard extends StatelessWidget {
                 elevation: 0,
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ListTile(
-                  leading: const Icon(
-                    Icons.location_on_outlined,
-                    color: Color(0xFF7041D8),
-                  ),
-                  title: const Text('จัดการตำแหน่ง GPS'),
-                  subtitle: const Text('เปิดหรือปิดการรับงาน'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const TechnicianLocationScreen(),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const _TechnicianMenu(
-                icon: Icons.toggle_on_outlined,
-                title: 'สถานะการรับงาน',
-                subtitle: 'จัดการสถานะออนไลน์และออฟไลน์',
-              ),
-              Card(
-                color: Colors.white,
-                elevation: 0,
-                margin: const EdgeInsets.only(bottom: 10),
-                child: ListTile(
                   leading: const CircleAvatar(
                     backgroundColor: Color(0xFFEFE8FF),
                     child: Icon(
@@ -198,14 +179,14 @@ class TechnicianDashboard extends StatelessWidget {
                       color: Color(0xFF7041D8),
                     ),
                   ),
-                  title: const Text('จัดการราคาค่าบริการ'),
-                  subtitle: const Text('เพิ่ม แก้ไข และกำหนดราคาบริการของคุณ'),
+                  title: const Text('บอร์ดโพสต์เสนองานช่าง'),
+                  subtitle: const Text('โพสต์นำเสนองานของคุณ'),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const TechnicianPricingScreen(),
+                        builder: (_) => const TechnicianServiceCatalogScreen(),
                       ),
                     );
                   },

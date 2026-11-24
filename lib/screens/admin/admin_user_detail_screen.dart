@@ -139,6 +139,19 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen> {
     }
   }
 
+  String _roleLabel(String role) {
+    switch (role) {
+      case 'technician':
+        return 'ช่าง';
+      case 'customer':
+        return 'ลูกค้า';
+      case 'admin':
+        return 'ผู้ดูแลระบบ (Admin)';
+      default:
+        return role;
+    }
+  }
+
   Widget _info(String title, dynamic value) {
     final text = value?.toString().trim();
     return ListTile(
@@ -177,6 +190,10 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen> {
 
     final role = profile['role']?.toString() ?? '-';
     final fullName = profile['full_name']?.toString().trim();
+    final avatarUrl = profile['avatar_url']?.toString().trim() ??
+        technician?['avatar_url']?.toString().trim() ??
+        '';
+    final hasAvatar = avatarUrl.isNotEmpty;
     final suspended = profile['account_status'] == 'suspended';
 
     return Scaffold(
@@ -195,9 +212,17 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-                  const CircleAvatar(
-                    radius: 34,
-                    child: Icon(Icons.person, size: 35),
+                  CircleAvatar(
+                    radius: 42,
+                    backgroundColor: const Color(0xFFEFE8FF),
+                    backgroundImage: hasAvatar ? NetworkImage(avatarUrl) : null,
+                    child: !hasAvatar
+                        ? Icon(
+                            role == 'technician' ? Icons.build : Icons.person,
+                            size: 38,
+                            color: const Color(0xFF7041D8),
+                          )
+                        : null,
                   ),
                   const SizedBox(height: 12),
                   Text(
@@ -209,7 +234,11 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(role),
+                  const SizedBox(height: 4),
+                  Text(
+                    _roleLabel(role),
+                    style: const TextStyle(color: Colors.black54),
+                  ),
                   const SizedBox(height: 12),
                   Chip(
                     label: Text(suspended ? 'ระงับบัญชี' : 'บัญชีใช้งานปกติ'),

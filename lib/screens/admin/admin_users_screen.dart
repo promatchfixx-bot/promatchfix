@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../models/admin_user_model.dart';
 import '../../services/admin_user_service.dart';
@@ -13,9 +14,11 @@ class AdminUsersScreen extends StatefulWidget {
 
 class _AdminUsersScreenState extends State<AdminUsersScreen> {
   final service = AdminUserService();
+  final _client = Supabase.instance.client;
   final searchController = TextEditingController();
 
   List<AdminUser> users = [];
+  Map<String, Map<String, dynamic>> profilesById = {};
   bool loading = true;
   String role = 'all';
   int page = 0;
@@ -32,6 +35,31 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     super.dispose();
   }
 
+  Future<void> _loadProfilesMap(List<AdminUser> list) async {
+    final map = <String, Map<String, dynamic>>{};
+    final ids = list.map((u) => u.id.trim()).where((id) => id.isNotEmpty).toSet();
+
+    if (ids.isNotEmpty) {
+      try {
+        final rows = await _client
+            .from('profiles')
+            .select('id, full_name, avatar_url, phone, role')
+            .inFilter('id', ids.toList());
+
+        for (final row in List.from(rows)) {
+          if (row is Map) {
+            final pid = row['id']?.toString().trim() ?? '';
+            if (pid.isNotEmpty) {
+              map[pid] = Map<String, dynamic>.from(row);
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
+    profilesById = map;
+  }
+
   Future<void> loadUsers() async {
     setState(() => loading = true);
 
@@ -41,6 +69,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         keyword: searchController.text,
         page: page,
       );
+
+      await _loadProfilesMap(result);
 
       if (!mounted) return;
       setState(() {
@@ -133,56 +163,73 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             child: loading
                 ? const Center(child: CircularProgressIndicator())
                 : users.isEmpty
-                ? const Center(child: Text('ไม่พบสมาชิก'))
-                : RefreshIndicator(
-                    onRefresh: loadUsers,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: users.length,
-                      itemBuilder: (context, index) {
-                        final user = users[index];
-                        final suspended = user.accountStatus == 'suspended';
+                    ? const Center(child: Text('ไม่พบสมาชิก'))
+                    : RefreshIndicator(
+                        onRefresh: loadUsers,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: users.length,
+                          itemBuilder: (context, index) {
+                            final user = users[index];
+                            final profile = profilesById[user.id.trim()];
+                            final displayName =
+                                (profile?['full_name']?.toString().trim() ?? '')
+                                        .isNotEmpty
+                                    ? profile!['full_name'].toString().trim()
+                                    : ((user.fullName ?? '').trim().isNotEmpty
+                                        ? user.fullName!.trim()
+                                        : 'ไม่ระบุชื่อ');
+                            final avatarUrl =
+                                profile?['avatar_url']?.toString().trim() ?? '';
+                            final hasAvatar = avatarUrl.isNotEmpty;
+                            final suspended = user.accountStatus == 'suspended';
 
-                        return Card(
-                          color: Colors.white,
-                          elevation: 0,
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: const Color(0xFFEFE8FF),
-                              child: Icon(
-                                user.role == 'technician'
-                                    ? Icons.build
-                                    : Icons.person,
-                                color: const Color(0xFF7041D8),
-                              ),
-                            ),
-                            title: Text(
-                              user.fullName ?? 'ไม่ระบุชื่อ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(
-                              '${roleLabel(user.role)} • ${user.phone ?? '-'}\n${suspended ? 'ระงับบัญชี' : 'ใช้งานปกติ'}',
-                            ),
-                            isThreeLine: true,
-                            trailing: const Icon(Icons.chevron_right),
-                            onTap: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      AdminUserDetailScreen(userId: user.id),
+                            return Card(
+                              color: Colors.white,
+                              elevation: 0,
+                              margin: const EdgeInsets.only(bottom: 10),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  radius: 22,
+                                  backgroundColor: const Color(0xFFEFE8FF),
+                                  backgroundImage:
+                                      hasAvatar ? NetworkImage(avatarUrl) : null,
+                                  child: !hasAvatar
+                                      ? Icon(
+                                          user.role == 'technician'
+                                              ? Icons.build
+                                              : Icons.person,
+                                          color: const Color(0xFF7041D8),
+                                        )
+                                      : null,
                                 ),
-                              );
-                              loadUsers();
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                                title: Text(
+                                  displayName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  '${roleLabel(user.role)} • ${user.phone ?? '-'}\n${suspended ? 'ระงับบัญชี' : 'ใช้งานปกติ'}',
+                                ),
+                                isThreeLine: true,
+                                trailing: const Icon(Icons.chevron_right),
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => AdminUserDetailScreen(
+                                        userId: user.id,
+                                      ),
+                                    ),
+                                  );
+                                  loadUsers();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
           ),
           if (!loading)
             Padding(
